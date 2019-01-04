@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "391412575752",
+    "firebase_url": "https://closr-flutter-app-227104.firebaseio.com",
+    "project_id": "closr-flutter-app-227104",
+    "storage_bucket": "closr-flutter-app-227104.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391412575752:android:8fcc0b5ed4bd6715",
+        "android_client_info": {
+          "package_name": "com.closr.proto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391412575752-g33dp43uig5cr4gj6m06pc8mol8hjdl2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.closr.proto",
+            "certificate_hash": "f3f598e3b0ac12cb12d91986f233c0ee2a2e7d32"
+          }
+        },
+        {
+          "client_id": "391412575752-s9s5id0oilvnimu1c5uivk5sha7rsmp7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMwfrA7Xy3L_qogtUFeQ8V4CAEHdIo6c4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391412575752-s9s5id0oilvnimu1c5uivk5sha7rsmp7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "391412575752-n1lupet2ih24bebs6q01urf5mdho9chn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.closr.proto"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

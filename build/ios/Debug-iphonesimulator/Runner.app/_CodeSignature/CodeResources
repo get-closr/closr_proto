@@ -82,7 +82,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		OVk12FMCe/mrzBat1xbltAwbBxY=
+		coiSGk9J1olK8wZXCwab/3BbOoI=
 		</data>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
@@ -140,9 +140,13 @@
 		<data>
 		cjDelfr3ugTDn3+r5icq6Ge1n4Q=
 		</data>
+		<key>GoogleService-Info.plist</key>
+		<data>
+		pRvGyaYt81GGNUP8PYkAwerItLc=
+		</data>
 		<key>Info.plist</key>
 		<data>
-		OmimsaN4oAb47iILotasu6nkkFw=
+		ZOsYordhk6VtKDRMwH5/LssJhlE=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -170,7 +174,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		4JPgfZMNrtJO878wEa/N2AHBU5s=
+		nPmi5wgXWgU2j6ZrH9sUa4cy9PM=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -396,11 +400,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			OVk12FMCe/mrzBat1xbltAwbBxY=
+			coiSGk9J1olK8wZXCwab/3BbOoI=
 			</data>
 			<key>hash2</key>
 			<data>
-			eIXY6ZUGB90JIPSPu2Wj/tJDV+ROSELp0eocyKGMz+w=
+			LXrJnVCkTI8Lr4cqVuT41UwBbqN0DvtekR2HsioQCpA=
 			</data>
 		</dict>
 		<key>Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
@@ -557,6 +561,17 @@
 			INkC1JLiLe7AB9SqeZRmj6oaRlkPwCvM96J3pilvsnc=
 			</data>
 		</dict>
+		<key>GoogleService-Info.plist</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			pRvGyaYt81GGNUP8PYkAwerItLc=
+			</data>
+			<key>hash2</key>
+			<data>
+			qleupVtHuncqaNhJJXJOC31WVu9ifWq2x6iLpTm3Zes=
+			</data>
+		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash</key>
@@ -616,11 +631,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			4JPgfZMNrtJO878wEa/N2AHBU5s=
+			nPmi5wgXWgU2j6ZrH9sUa4cy9PM=
 			</data>
 			<key>hash2</key>
 			<data>
-			uf8VO6CwMIlRSz5BW0AmpQmX6RCDU1vQOJNKgX6/dxI=
+			kmWWcNRTZU6Fp/SVHEROW2ogLmnar78DIC/6jz4ioCE=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
