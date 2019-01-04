@@ -1,4 +1,4 @@
-package com.example.closr;
+package com.closr.proto;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
