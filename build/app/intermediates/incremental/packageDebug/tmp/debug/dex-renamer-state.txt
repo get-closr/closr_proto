@@ -1,4 +1,0 @@
-#Fri Jan 04 20:35:06 SGT 2019
-base.0=/Users/wanyizhou/workspace/closr/prototype/closr_proto/build/app/intermediates/transforms/dexMerger/debug/0
-path.0=classes.dex
-renamed.0=classes.dex
