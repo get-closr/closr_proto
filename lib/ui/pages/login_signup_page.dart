@@ -23,9 +23,6 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   bool _isIos;
   bool _isLoading;
-
-  // GoogleSignIn googleauth = GoogleSignIn();
-
   bool _validateAndSave() {
     final form = _formKey.currentState;
     if (form.validate()) {
@@ -97,16 +94,17 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Closr Login/Signup"),
-          centerTitle: true,
-        ),
-        body: Stack(
+        body: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Stack(
           children: <Widget>[
             _showBody(),
             _showCircularProgress(),
           ],
-        ));
+        ),
+      ),
+    ));
   }
 
   Widget _showLogo() {
@@ -116,8 +114,12 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         padding: EdgeInsets.fromLTRB(0, 70, 0, 0),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          radius: 48.0,
-          child: Image.asset('asset/images/flutter-icon.png'),
+          radius: 80.0,
+          child: Image.asset(
+            // 'asset/images/diamond.png',
+            'asset/images/Closr_grey_01.png',
+            color: Theme.of(context).primaryIconTheme.color,
+          ),
         ),
       ),
     );
@@ -131,7 +133,9 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
         decoration: InputDecoration(
-            hintText: 'Email', icon: Icon(Icons.mail, color: Colors.grey)),
+          hintText: 'Email',
+          icon: Icon(Icons.mail, color: Colors.grey),
+        ),
         validator: (value) => value.isEmpty ? 'Email can\'t be empty,' : null,
         onSaved: (value) => _email = value,
       ),
@@ -145,8 +149,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         maxLines: 1,
         obscureText: true,
         autofocus: false,
-        decoration: InputDecoration(
-            hintText: 'Password', icon: Icon(Icons.lock, color: Colors.grey)),
+        decoration:
+            InputDecoration(hintText: 'Password', icon: Icon(Icons.lock)),
         validator: (value) =>
             value.isEmpty ? 'Password can\'t be empty,' : null,
         onSaved: (value) => _password = value,
@@ -156,21 +160,21 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   Widget _showPrimaryButton() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+      padding: const EdgeInsets.fromLTRB(10, 50, 0, 10),
       child: SizedBox(
         height: 40.0,
         child: RaisedButton(
-          elevation: 5.0,
+          elevation: 8.0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          color: Colors.blue,
+          color: Theme.of(context).buttonColor,
           child: _formMode == FormMode.LOGIN
               ? Text(
                   'Login',
-                  style: TextStyle(fontSize: 20.0, color: Colors.white),
                 )
-              : Text('Create Account',
-                  style: TextStyle(fontSize: 20.0, color: Colors.white)),
+              : Text(
+                  'Create Account',
+                ),
           onPressed: _validateAndSubmit,
         ),
       ),
@@ -180,10 +184,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   Widget _showSecondaryButton() {
     return FlatButton(
       child: _formMode == FormMode.LOGIN
-          ? Text('Create an account',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300))
-          : Text('Have an account? Sign in',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
+          ? Text('Create an account')
+          : Text('Have an account? Sign in'),
       onPressed: _formMode == FormMode.LOGIN
           ? _changeFormToSignUp
           : _changeFormToLogin,
@@ -192,37 +194,12 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return Text(_errorMessage,
-          style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w300,
-              color: Colors.red,
-              height: 1.0));
+      return Text(_errorMessage);
     } else {
       return Container(
         height: 0.0,
       );
     }
-  }
-
-  Widget _showBody() {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            _showLogo(),
-            _showEmailInput(),
-            _showPasswordInput(),
-            _showPrimaryButton(),
-            _showSecondaryButton(),
-            _showErrorMessage()
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _showCircularProgress() {
@@ -234,6 +211,44 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     return Container(
       height: 0.0,
       width: 0.0,
+    );
+  }
+
+  Widget _showBody() {
+    return AccentColorOverride(
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              _showLogo(),
+              _showEmailInput(),
+              _showPasswordInput(),
+              _showPrimaryButton(),
+              _showSecondaryButton(),
+              _showErrorMessage()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AccentColorOverride extends StatelessWidget {
+  const AccentColorOverride({Key key, this.color, this.child})
+      : super(key: key);
+
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      child: child,
+      data: Theme.of(context).copyWith(accentColor: color),
     );
   }
 }
