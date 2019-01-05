@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_signup_page.dart';
 import 'closr_home.dart';
-import 'home_page.dart';
+// import 'home_page.dart';
 import 'package:CLOSR/utils/auth.dart';
 
 class RootPage extends StatefulWidget {
@@ -78,12 +78,11 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return Closrhome();
-          // return HomePage(
-          //   userId: _userId,
-          //   auth: widget.auth,
-          //   onSignedOut: _onSignedOut,
-          // );
+          return Closrhome(
+            userId: _userId,
+            auth: widget.auth,
+            onSignedOut: _onSignedOut,
+          );
         } else
           return _buildWaitingScreen();
         break;
