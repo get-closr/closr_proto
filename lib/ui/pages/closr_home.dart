@@ -1,102 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:CLOSR/utils/auth.dart';
-import 'package:CLOSR/ui/chat/chat_screen.dart';
+// import 'closr_photoSwipper.dart';
 
-class Closrhome extends StatefulWidget {
-  Closrhome({Key key, this.auth, this.userId, this.onSignedOut})
-      : super(key: key);
-
-  final BaseAuth auth;
-  final VoidCallback onSignedOut;
-  final String userId;
-
-  @override
-  State<StatefulWidget> createState() => _ClosrhomeState();
-}
-
-class _ClosrhomeState extends State<Closrhome> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class Closrhome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size media = MediaQuery.of(context).size;
+    double height = media.height.toDouble();
+    double appBarSize = height / 15;
+    double containerSize = height - appBarSize - 200;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("CLOSR"),
-        elevation: 0.0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.menu, semanticLabel: 'menu'),
-          onPressed: () {
-            print('Menu button');
-          },
+        // appBar: PreferredSize(
+        //   preferredSize: Size.fromHeight(appBarSize),
+        //   child: AppBar(
+        //     title: Text("CLOSR"),
+        //     elevation: 0.0,
+        //     centerTitle: true,
+        //     leading: IconButton(
+        //       icon: Icon(Icons.menu, semanticLabel: 'menu'),
+        //       onPressed: () {
+        //         print('Menu button');
+        //       },
+        //     ),
+        //     actions: <Widget>[
+        //       FlatButton(
+        //         child: Text(
+        //           'LOGOUT',
+        //         ),
+        //         onPressed: () {},
+        //       )
+        //     ],
+        //   ),
+        // ),
+        body: Container(
+      color: Colors.teal,
+      height: containerSize,
+      // child: Column(
+      //   children: <Widget>[
+      //     profileSection(),
+      //     Divider(
+      //       height: 1.0,
+      //     ),
+      //     ClosrSwipper(),
+      //     Divider(
+      //       height: 1.0,
+      //     ),
+      //     // ClosrChat()
+      //   ],
+      // ),
+    ));
+  }
+
+  Widget profileSection() {
+    return Expanded(
+      flex: 1,
+      child: Container(
+        color: Colors.grey[50],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            CircleAvatar(
+              radius: 30,
+              child: Image.asset('asset/images/dev.png'),
+              backgroundColor: Colors.pink[50],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Row(children: [
+                  Icon(
+                    Icons.account_circle,
+                    color: Colors.green,
+                  ),
+                  Text('Lee is online')
+                ]),
+                Row(children: [
+                  Icon(
+                    Icons.account_circle,
+                    color: Colors.pink,
+                  ),
+                  Text('Dev is offline')
+                ]),
+              ],
+            ),
+            CircleAvatar(
+              radius: 30,
+              child: Image.asset('asset/images/lee.png'),
+              backgroundColor: Colors.green[50],
+            ),
+          ],
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              semanticLabel: 'settings',
-            ),
-            onPressed: () {
-              print('settings button');
-            },
-          ),
-          FlatButton(
-            child: Text(
-              'LOGOUT',
-            ),
-            onPressed: _signOut,
-          )
-        ],
-      ),
-      body: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          profileSection,
-          Divider(
-            height: 1.0,
-          ),
-          photoSection,
-          Divider(
-            height: 1.0,
-          ),
-          ChatScreen(),
-        ],
       ),
     );
   }
 
-  Widget photoSection = Container(
-    height: 400,
-    color: Colors.pinkAccent[100],
-  );
-
-  Widget profileSection = Container(
-    height: 100,
-    color: Colors.grey[50],
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[Text('Name Lala'), Text('My descriptions')],
-        ),
-        CircleAvatar(
-          radius: 40,
-          child: Image.asset('asset/images/dev.png'),
-        ),
-      ],
-    ),
-  );
-
-  _signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.onSignedOut();
-    } catch (e) {
-      print(e);
-    }
-  }
+  // _signOut() async {
+  //   try {
+  //     await widget.auth.signOut();
+  //     widget.onSignedOut();
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 }

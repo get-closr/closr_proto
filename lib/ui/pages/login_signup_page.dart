@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:CLOSR/utils/auth.dart';
+import 'package:closr/utils/auth.dart';
 
 class LoginSignupPage extends StatefulWidget {
   LoginSignupPage({this.auth, this.onSignedIn});
@@ -92,77 +92,72 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   }
 
   Widget build(BuildContext context) {
+    Size media = MediaQuery.of(context).size;
+    double width = media.width.toDouble();
+    double padding = (width - 300) / 2;
+    double logoSize = width / 2.5;
+
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
         body: SafeArea(
+      bottom: true,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        padding: EdgeInsets.fromLTRB(padding, 0, padding, 0),
         child: Stack(
+          fit: StackFit.expand,
           children: <Widget>[
-            _showBody(),
             _showCircularProgress(),
+            _showBody(logoSize),
           ],
         ),
       ),
     ));
   }
 
-  Widget _showLogo() {
+  Widget _showLogo(logoSize) {
     return Hero(
       tag: 'hero',
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(0, 70, 0, 0),
-        child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 80.0,
-          child: Image.asset(
-            // 'asset/images/diamond.png',
-            'asset/images/Closr_grey_01.png',
-            color: Theme.of(context).primaryIconTheme.color,
-          ),
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        radius: logoSize,
+        child: Image.asset(
+          'asset/images/Closr_grey_01.png',
+          color: Theme.of(context).primaryIconTheme.color,
         ),
       ),
     );
   }
 
   Widget _showEmailInput() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-      child: TextFormField(
-        maxLines: 1,
-        keyboardType: TextInputType.emailAddress,
-        autofocus: false,
-        decoration: InputDecoration(
-          hintText: 'Email',
-          icon: Icon(Icons.mail, color: Colors.grey),
-        ),
-        validator: (value) => value.isEmpty ? 'Email can\'t be empty,' : null,
-        onSaved: (value) => _email = value,
+    return TextFormField(
+      maxLines: 1,
+      keyboardType: TextInputType.emailAddress,
+      autofocus: false,
+      decoration: InputDecoration(
+        hintText: 'Email',
+        icon: Icon(Icons.mail, color: Colors.grey),
       ),
+      validator: (value) => value.isEmpty ? 'Email can\'t be empty,' : null,
+      onSaved: (value) => _email = value,
     );
   }
 
   Widget _showPasswordInput() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
-      child: TextFormField(
-        maxLines: 1,
-        obscureText: true,
-        autofocus: false,
-        decoration:
-            InputDecoration(hintText: 'Password', icon: Icon(Icons.lock)),
-        validator: (value) =>
-            value.isEmpty ? 'Password can\'t be empty,' : null,
-        onSaved: (value) => _password = value,
-      ),
+    return TextFormField(
+      maxLines: 1,
+      obscureText: true,
+      autofocus: false,
+      decoration: InputDecoration(hintText: 'Password', icon: Icon(Icons.lock)),
+      validator: (value) => value.isEmpty ? 'Password can\'t be empty,' : null,
+      onSaved: (value) => _password = value,
     );
   }
 
   Widget _showPrimaryButton() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 50, 0, 10),
+      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
       child: SizedBox(
-        height: 40.0,
+        height: MediaQuery.of(context).size.height / 20,
         child: RaisedButton(
           elevation: 8.0,
           shape:
@@ -178,6 +173,15 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           onPressed: _validateAndSubmit,
         ),
       ),
+    );
+  }
+
+  Widget _showGoogleButton() {
+    return RaisedButton(
+      child: Text('Login with Google'),
+      color: Theme.of(context).buttonColor,
+      elevation: 7.0,
+      onPressed: widget.auth.googleLogIn,
     );
   }
 
@@ -214,20 +218,25 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     );
   }
 
-  Widget _showBody() {
+  Widget _showBody(logoSize) {
     return AccentColorOverride(
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(
           key: _formKey,
           child: ListView(
+            scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: <Widget>[
-              _showLogo(),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: _showLogo(logoSize),
+              ),
               _showEmailInput(),
               _showPasswordInput(),
               _showPrimaryButton(),
               _showSecondaryButton(),
+              // _showGoogleButton(),
               _showErrorMessage()
             ],
           ),
