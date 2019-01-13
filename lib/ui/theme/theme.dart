@@ -47,7 +47,7 @@ TextTheme buildClosrTextTheme(TextTheme base, theme) {
         headline: base.headline.copyWith(
           fontWeight: FontWeight.w500,
         ),
-        title: base.title.copyWith(fontSize: 18.0),
+        title: base.title.copyWith(fontSize: 20.0),
         caption: base.caption.copyWith(
           fontWeight: FontWeight.w400,
           fontSize: 14.0,
