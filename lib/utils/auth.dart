@@ -13,6 +13,8 @@ abstract class BaseAuth {
   Future<String> googleLogIn();
 
   Future<void> signOut();
+
+  // Future<Null> _ensureLoggedIn();
 }
 
 class Auth implements BaseAuth {
@@ -30,6 +32,8 @@ class Auth implements BaseAuth {
     // storeNewUser(user);
     return user.uid;
   }
+
+  // Future<Null> _ensureLoggedIn() async {}
 
   Future<String> signIn(String email, String password) async {
     FirebaseUser user = await _firebaseAuth.signInWithEmailAndPassword(

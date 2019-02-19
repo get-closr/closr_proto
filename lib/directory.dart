@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:closr/models/pages.dart';
-import 'package:closr/ui/components/home.dart';
+import 'package:closr/ui/pages/home.dart';
 import 'package:closr/ui/components/red.dart';
 import 'package:closr/ui/components/yellow.dart';
 import 'ui/pages/no_content.dart';
 import 'ui/widgets/chat.dart';
+import 'package:closr/utils/auth.dart';
 
 class Directory extends StatelessWidget {
   final Pages page;
-  const Directory({this.page});
+  final Auth auth;
+  const Directory({this.page, this.auth});
   @override
   Widget build(BuildContext context) {
     // print(page);
@@ -17,7 +19,7 @@ class Directory extends StatelessWidget {
         return Home();
         break;
       case Pages.chat:
-        return ChatScreen();
+        return ChatScreen(auth: auth);
         break;
       case Pages.profile:
         return Red();
@@ -25,8 +27,6 @@ class Directory extends StatelessWidget {
       case Pages.settings:
         return Yellow();
         break;
-      case Pages.logout:
-      //TODO: Raise dialog
       default:
         return NoContent();
     }

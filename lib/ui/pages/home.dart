@@ -38,10 +38,21 @@ class Home extends StatelessWidget {
                     ),
                   ],
                 )),
-            Text("CHAT AWAY", textAlign: TextAlign.center),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.face),
+                Text("CHAT AWAY", textAlign: TextAlign.center),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: SizedBox(height: 200, child: ChatScreen()),
+              child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.all(Radius.circular(40.0))),
+                  child: ChatScreen()),
             )
           ],
         ),
