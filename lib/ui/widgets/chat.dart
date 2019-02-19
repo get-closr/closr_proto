@@ -2,140 +2,240 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:closr/utils/auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+
 const String _name = "Your Name";
+var currentUserEmail;
+var _scaffoldContext;
 
 @override
-class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text, this.animationController});
-  final String text;
-  final AnimationController animationController;
+class ChatMessageListItem extends StatelessWidget {
+  final DataSnapshot messageSnapshot;
+  final Animation animation;
+
+  ChatMessageListItem({this.messageSnapshot, this.animation});
 
   Widget build(BuildContext context) {
-    return new SizeTransition(
-      sizeFactor: new CurvedAnimation(
-          parent: animationController, curve: Curves.easeOut),
-      axisAlignment: 0.0,
-      child: new Container(
+    return SizeTransition(
+      sizeFactor: CurvedAnimation(parent: animation, curve: Curves.decelerate),
+      child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: new Row(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            new Container(
-              margin: const EdgeInsets.only(right: 16.0),
-              child: new CircleAvatar(child: new Text(_name[0])),
-            ),
-            new Expanded(
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  new Text(_name, style: Theme.of(context).textTheme.subhead),
-                  new Container(
-                    margin: const EdgeInsets.only(top: 5.0),
-                    child: new Text(text),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          children: currentUserEmail == messageSnapshot.value['email']
+              ? getSentMessageLayout()
+              : getReceivedMessageLayout(),
         ),
       ),
     );
   }
+
+  List<Widget> getSentMessageLayout() {
+    return <Widget>[
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Text(messageSnapshot.value['senderName']),
+            Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: messageSnapshot.value['imageUrl'] != null
+                  ? Image.network(
+                      messageSnapshot.value['imageUrl'],
+                      width: 250.0,
+                    )
+                  : Text(messageSnapshot.value['text']),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(left: 8.0),
+                  child: CircleAvatar(
+                    backgroundImage:
+                        NetworkImage(messageSnapshot.value['senderPhotoUrl']),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      )
+    ];
+  }
+
+  List<Widget> getReceivedMessageLayout() {
+    return <Widget>[
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 8.0),
+            child: CircleAvatar(
+              backgroundImage:
+                  NetworkImage(messageSnapshot.value['senderPhotoUrl']),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(messageSnapshot.value['senderName']),
+                Container(
+                  margin: EdgeInsets.only(top: 5.0),
+                  child: messageSnapshot.value['imageUrl'] != null
+                      ? Image.network(messageSnapshot.value['imageUrl'],
+                          width: 250.0)
+                      : Text(messageSnapshot.value['text']),
+                ),
+              ],
+            ),
+          )
+        ],
+      )
+    ];
+  }
 }
 
 class ChatScreen extends StatefulWidget {
+  ChatScreen({this.auth});
+
+  final Auth auth;
   @override
-  State createState() => new ChatScreenState();
+  State createState() => ChatScreenState();
 }
 
 class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
-  final List<ChatMessage> _messages = <ChatMessage>[];
-  final TextEditingController _textController = new TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   bool _isComposing = false;
+
+  final reference = FirebaseDatabase.instance.reference().child('messages');
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      new Flexible(
-          child: new ListView.builder(
-        padding: new EdgeInsets.all(8.0),
-        reverse: true,
-        itemBuilder: (_, int index) => _messages[index],
-        itemCount: _messages.length,
-      )),
-      new Divider(height: 1.0),
-      new Container(
-        decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-        child: _buildTextComposer(),
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Flexible(
+            child: FirebaseAnimatedList(
+              query: reference,
+              reverse: true,
+              sort: (a, b) => b.key.compareTo(a.key),
+              itemBuilder: (_, DataSnapshot messageSnapshot,
+                  Animation<double> animation, int index) {
+                return ChatMessageListItem(
+                  messageSnapshot: messageSnapshot,
+                  animation: animation,
+                );
+              },
+            ),
+          ),
+          Divider(height: 1.0),
+          Container(
+            decoration: BoxDecoration(color: Theme.of(context).cardColor),
+            child: _buildTextComposer(),
+          ),
+          Builder(
+            builder: (BuildContext context) {
+              _scaffoldContext = context;
+              return Container(
+                width: 0,
+                height: 0,
+              );
+            },
+          )
+        ],
       ),
-    ]);
+    );
   }
 
   Widget _buildTextComposer() {
-    return new IconTheme(
-      data: new IconThemeData(color: Theme.of(context).accentColor),
-      child: new Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: new Row(children: <Widget>[
-            new Flexible(
-              child: new TextField(
-                controller: _textController,
-                onChanged: (String text) {
-                  setState(() {
-                    _isComposing = text.length > 0;
-                  });
-                },
-                onSubmitted: _isComposing ? _handleSubmitted : null,
-                decoration:
-                    new InputDecoration.collapsed(hintText: "Send a message"),
+    return GestureDetector(
+      onTap: () {
+        _dismissKeyboard(context);
+      },
+      child: IconTheme(
+        data: IconThemeData(
+            color: _isComposing
+                ? Theme.of(context).accentColor
+                : Theme.of(context).disabledColor),
+        child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(children: <Widget>[
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 4.0),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.photo_camera,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  onPressed: () async {},
+                ),
               ),
-            ),
-            new Container(
-                margin: new EdgeInsets.symmetric(horizontal: 4.0),
-                child: Theme.of(context).platform == TargetPlatform.iOS
-                    ? new CupertinoButton(
-                        child: new Text("Send"),
-                        onPressed: _isComposing
-                            ? () => _handleSubmitted(_textController.text)
-                            : null,
-                      )
-                    : new IconButton(
-                        icon: new Icon(Icons.send),
-                        onPressed: _isComposing
-                            ? () => _handleSubmitted(_textController.text)
-                            : null,
-                      )),
-          ]),
-          decoration: Theme.of(context).platform == TargetPlatform.iOS
-              ? new BoxDecoration(
-                  border:
-                      new Border(top: new BorderSide(color: Colors.grey[200])))
-              : null),
+              Flexible(
+                child: TextField(
+                  controller: _textController,
+                  onChanged: (String messageText) {
+                    setState(() {
+                      _isComposing = messageText.length > 0;
+                    });
+                  },
+                  onSubmitted: _isComposing ? _handleSubmitted : null,
+                  decoration:
+                      InputDecoration.collapsed(hintText: "Send a message"),
+                ),
+              ),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Theme.of(context).platform == TargetPlatform.iOS
+                      ? CupertinoButton(
+                          child: Text("Send"),
+                          onPressed: _isComposing
+                              ? () => _handleSubmitted(_textController.text)
+                              : null,
+                        )
+                      : IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: _isComposing
+                              ? () => _handleSubmitted(_textController.text)
+                              : null,
+                        )),
+            ]),
+            decoration: Theme.of(context).platform == TargetPlatform.iOS
+                ? BoxDecoration(
+                    border: Border(top: BorderSide(color: Colors.grey[200])))
+                : null),
+      ),
     );
   }
 
-  void _handleSubmitted(String text) {
+  Future<Null> _handleSubmitted(String text) async {
     _textController.clear();
+
     setState(() {
       _isComposing = false;
     });
-    ChatMessage message = new ChatMessage(
-      text: text,
-      animationController: new AnimationController(
-        duration: new Duration(milliseconds: 700),
-        vsync: this,
-      ),
-    );
-    setState(() {
-      _messages.insert(0, message);
-    });
-    message.animationController.forward();
+    await _ensureLoggedIn();
+    _sendMessage(messageText: text, imageUrl: null);
   }
 
-  @override
-  void dispose() {
-    for (ChatMessage message in _messages)
-      message.animationController.dispose();
-    super.dispose();
+  void _sendMessage({String messageText, String imageUrl}) {
+    reference.push().set({
+      'text': messageText,
+      'email': widget.auth.getCurrentUser(),
+      'imageUrl': imageUrl,
+      // 'senderName': widget.auth.getCurrentUser(),
+      // 'senderPhotoUrl': widget.auth.getCurrentUser()
+    });
+  }
+
+  Future<Null> _ensureLoggedIn() async {
+    currentUserEmail = widget.auth.getCurrentUser();
+  }
+
+  _dismissKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
   }
 }

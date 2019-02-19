@@ -1,1 +1,1 @@
-enum Pages { home, chat, profile, settings, about, store, logout }
+enum Pages { home, chat, profile, settings, about, store }

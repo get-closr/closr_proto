@@ -35,19 +35,6 @@ class Closrhome extends StatelessWidget {
         body: Container(
       color: Colors.teal,
       height: containerSize,
-      // child: Column(
-      //   children: <Widget>[
-      //     profileSection(),
-      //     Divider(
-      //       height: 1.0,
-      //     ),
-      //     ClosrSwipper(),
-      //     Divider(
-      //       height: 1.0,
-      //     ),
-      //     // ClosrChat()
-      //   ],
-      // ),
     ));
   }
 

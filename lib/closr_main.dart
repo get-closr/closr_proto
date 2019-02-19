@@ -23,7 +23,6 @@ class _ClosrMainState extends State<ClosrMain> {
   void _onPageTap(Pages page) {
     setState(() {
       _currentPage = page;
-      // print(_currentPage);
     });
   }
 
@@ -33,7 +32,7 @@ class _ClosrMainState extends State<ClosrMain> {
       resizeToAvoidBottomPadding: false,
       body: Backdrop(
           currentPage: Pages.home,
-          frontLayer: Directory(page: _currentPage),
+          frontLayer: Directory(page: _currentPage, auth: widget.auth),
           backLayer: MenuPage(
             currentPage: _currentPage,
             onPagesTap: _onPageTap,

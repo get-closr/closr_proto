@@ -28,8 +28,6 @@ class _FrontLayer extends StatelessWidget {
             ),
           ),
           Expanded(
-            // color: Colors.teal,
-            // height: 700,
             child: child,
           )
         ],
@@ -198,6 +196,11 @@ class _BackdropState extends State<Backdrop>
   void _toggleBackdropLayerVisibility() {
     _controller.fling(
         velocity: _frontLayerVisible ? -_kFlingVelocity : _kFlingVelocity);
+    _dismissKeyboard(context);
+  }
+
+  _dismissKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
   }
 
   @override
@@ -234,8 +237,7 @@ class _BackdropState extends State<Backdrop>
       actions: <Widget>[
         IconButton(
           icon: Icon(
-            // Icons.bluetooth_disabled,
-            bluetoothStatus(2),
+            bluetoothStatus(1),
             color: Colors.purple,
             semanticLabel: 'bluetooth',
           ),
